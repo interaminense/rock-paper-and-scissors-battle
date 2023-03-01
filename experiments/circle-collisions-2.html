@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      #meuCanvas {
+        border: 1px solid;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="meuCanvas" width="500" height="500"></canvas>
+    <div>fps <span id="fps"></span></div>
+
+    <script>
+      const canvas = document.getElementById("meuCanvas");
+      const ctx = canvas.getContext("2d");
+      const circleSize = 10;
+      const circleTotal = 900;
+      const enableCollision = true;
+      const types = {
+        rock: { name: "rock", color: "red" },
+        paper: { name: "paper", color: "blue" },
+        scissors: { name: "scissors", color: "green" },
+      };
+      const circles = generateCircles(circleTotal);
+
+      let lastFrameTime = 0;
+      let fps = 0;
+
+      console.log({ circles });
+
+      function getPos(min, max) {
+        const pos = Math.random() * max;
+
+        return pos < min ? min : pos > max - min ? max - min : pos;
+      }
+
+      function generateCircles(total = 30) {
+        const circles = [];
+        const colorLength = Math.floor(total / Object.keys(types).length);
+
+        for (let i = 0; i < total; i++) {
+          const radius = 1 + Math.random() * circleSize;
+          const colorIndex = Math.floor(i / colorLength);
+
+          circles.push({
+            x: getPos(circleSize, canvas.width),
+            y: getPos(circleSize, canvas.height),
+            radius,
+            speed: 1 + Math.random(),
+            directionX: Math.random() < 0.5 ? -1 : 1,
+            directionY: Math.random() < 0.5 ? -1 : 1,
+            color: Object.values(types)[colorIndex].color,
+            type: Object.values(types)[colorIndex].name,
+          });
+        }
+
+        return circles;
+      }
+
+      function updateFPS() {
+        const fpsElement = document.getElementById("fps");
+        const currentTime = performance.now();
+        const delta = currentTime - lastFrameTime;
+
+        lastFrameTime = currentTime;
+        fps = 1000 / delta;
+
+        fpsElement.innerHTML = fps.toFixed(2);
+      }
+
+      function detectCollision(circle1, circle2) {
+        const distanceX = circle1.x - circle2.x;
+        const distanceY = circle1.y - circle2.y;
+        const distance = Math.sqrt(
+          distanceX * distanceX + distanceY * distanceY
+        );
+
+        if (distance <= circle1.radius + circle2.radius) {
+          const angle = Math.atan2(distanceY, distanceX);
+
+          if (enableCollision) {
+            circle1.directionX = Math.cos(angle);
+            circle1.directionY = Math.sin(angle);
+            circle2.directionX = -Math.cos(angle);
+            circle2.directionY = -Math.sin(angle);
+          }
+
+          // if (
+          //   (circle1.type === "rock" && circle2.type === "paper") ||
+          //   (circle1.type === "paper" && circle2.type === "rock")
+          // ) {
+          //   if (circle1.type === "rock") {
+          //     circle1.type = "paper";
+          //   } else {
+          //     circle2.type = "paper";
+          //   }
+          // } else if (
+          //   (circle1.type === "paper" && circle2.type === "scissors") ||
+          //   (circle1.type === "scissors" && circle2.type === "paper")
+          // ) {
+          //   if (circle1.type === "paper") {
+          //     circle1.type = "scissors";
+          //   } else {
+          //     circle2.type = "scissors";
+          //   }
+          // } else if (
+          //   (circle1.type === "scissors" && circle2.type === "rock") ||
+          //   (circle1.type === "rock" && circle2.type === "scissors")
+          // ) {
+          //   if (circle1.type === "scissors") {
+          //     circle1.type = "rock";
+          //   } else {
+          //     circle2.type = "rock";
+          //   }
+          // }
+
+          for (let i = 0; i < Object.keys(types).length; i++) {
+            const currentType = Object.values(types)[i].name;
+            const nextType =
+              Object.values(types)[(i + 1) % Object.keys(types).length].name;
+
+            if (
+              (circle1.type === currentType && circle2.type === nextType) ||
+              (circle1.type === nextType && circle2.type === currentType)
+            ) {
+              if (circle1.type === currentType) {
+                circle1.type = nextType;
+              } else {
+                circle2.type = nextType;
+              }
+              break;
+            }
+          }
+        }
+      }
+
+      function animate() {
+        // Limpe o canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Percorra todos os círculos na matriz "circles" e atualize suas posições
+        circles.forEach((circle) => {
+          // Adicione a lógica de rebatimento dos círculos nas bordas do canvas
+          if (
+            circle.x + circle.radius >= canvas.width ||
+            circle.x - circle.radius <= 0
+          ) {
+            circle.directionX = -circle.directionX;
+          }
+          if (
+            circle.y + circle.radius >= canvas.height ||
+            circle.y - circle.radius <= 0
+          ) {
+            circle.directionY = -circle.directionY;
+          }
+
+          // Atualize as posições dos círculos
+          circle.x += circle.speed * circle.directionX;
+          circle.y += circle.speed * circle.directionY;
+
+          // Desenhe os círculos no canvas
+          ctx.beginPath();
+          ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+
+          ctx.fillStyle = types[circle.type].color;
+
+          ctx.fill();
+          ctx.closePath();
+        });
+
+        // Chame a função de detecção de colisão para verificar se os círculos estão colidindo
+        for (let i = 0; i < circles.length; i++) {
+          for (let j = i + 1; j < circles.length; j++) {
+            detectCollision(circles[i], circles[j]);
+          }
+        }
+
+        updateFPS();
+        requestAnimationFrame(animate);
+      }
+
+      // Inicie a animação
+      animate();
+    </script>
+  </body>
+</html>

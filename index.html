@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock, Paper and Scissors battle ⚔️</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <header>
+      <h1 class="page-title">Rock, Paper and Scissors battle ⚔️</h1>
+    </header>
+
+    <div class="container">
+      <canvas id="canvas" width="500" height="700"></canvas>
+      <div>fps <span id="fps"></span></div>
+
+      <div class="controls">
+        <h3 class="title">Controls</h3>
+
+        <div id="pickerContainer"></div>
+
+        <div class="mb-2">
+          <button id="rock" type="button" class="btn mb-2">🪨</button>
+          <button id="paper" type="button" class="btn mb-2">📰</button>
+          <button id="scissors" type="button" class="btn mb-2">✂️</button>
+        </div>
+
+        <div class="mb-2">
+          <label for="circleSize">circle size</label>
+          <div>
+            <input
+              id="circleSize"
+              max="30"
+              min="5"
+              name="circleSize"
+              oninput="handleChangeCircle('circleSize', event)"
+              type="range"
+              value="15"
+            />
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <div><label for="circleTotal">total circles</label></div>
+          <input
+            id="circleTotal"
+            max="300"
+            min="3"
+            name="circleTotal"
+            oninput="handleChangeCircle('circleTotal', event)"
+            step="3"
+            type="range"
+            value="30"
+          />
+        </div>
+
+        <div class="mb-2">
+          <div><label for="speed">speed</label></div>
+          <input
+            id="speed"
+            max="10"
+            min="1"
+            name="speed"
+            oninput="handleChangeCircle('speed', event)"
+            type="range"
+            value="2"
+          />
+        </div>
+
+        <div class="mb-2">
+          <input
+            oninput="handleChangeCircle('enableCollision', event, true)"
+            type="checkbox"
+            checked
+            id="enableCollision"
+          />
+
+          <label for="enableCollision">enable collision</label>
+        </div>
+
+        <div class="mb-2">
+          <input
+            oninput="handleChangeCircle('enableStroke', event, true)"
+            type="checkbox"
+            id="enableStroke"
+          />
+
+          <label for="enableStroke">enable circle stroke</label>
+        </div>
+
+        <div class="mb-2">
+          <button class="btn btn-reset" onclick="handleResetAnimation()">
+            reset
+          </button>
+        </div>
+      </div>
+
+      <div class="about-it">
+        <h3 class="title">How it works?</h3>
+        <p class="description">
+          <span class="icon-rock">🪨</span>, <span class="icon-paper">📰</span>,
+          and <span class="icon-scissors">✂️</span> icons are rendered and move
+          randomly across the screen. When two icons meet, they change according
+          to the rules of the animation:
+        </p>
+
+        <ol>
+          <li>
+            <span class="icon-paper">📰</span> wins
+            <span class="icon-rock">🪨</span>
+          </li>
+          <li>
+            <span class="icon-rock">🪨</span> wins
+            <span class="icon-scissors">✂️</span>
+          </li>
+          <li>
+            <span class="icon-scissors">✂️</span> wins
+            <span class="icon-paper">📰</span>
+          </li>
+        </ol>
+      </div>
+
+      <div>
+        <h3>About Rock, Paper and Scissors</h3>
+        <p class="description">
+          It is a simple hand game played between two people where each player
+          forms one of three hand signs: rock, paper, or scissors. The objective
+          is to choose a sign that defeats the other player's sign based on a
+          set of rules. It is typically played in a best-of-three format and can
+          be played by anyone, anywhere, without any special equipment.
+        </p>
+      </div>
+
+      <div>
+        <h3>Links</h3>
+        <p class="description">
+          This animation was inspired by
+          <a
+            href="https://www.tiktok.com/@rockpaperscissorsbattle"
+            target="_blank"
+            >https://www.tiktok.com/@rockpaperscissorsbattle</a
+          >
+        </p>
+        <p class="description">
+          You can star or fork it on github
+          <a
+            href="https://github.com/interaminense/rock-paper-and-scissors-battle"
+            target="_blank"
+            >https://github.com/interaminense/rock-paper-and-scissors-battle</a
+          >
+        </p>
+        <p class="description">
+          More about rock, paper and scissors
+          <a
+            href="https://en.wikipedia.org/wiki/Rock_paper_scissors"
+            target="_blank"
+            >https://en.wikipedia.org/wiki/Rock_paper_scissors</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <small
+        >made with ❤️ by
+        <a href="https://interaminense.dev" target="_blank"
+          >@interaminense</a
+        ></small
+      >
+    </footer>
+
+    <script src="https://unpkg.com/picmo@latest/dist/umd/index.js"></script>
+    <script src="https://unpkg.com/@picmo/popup-picker@latest/dist/umd/index.js"></script>
+    <script src="js/animation.js"></script>
+    <script src="js/fps.js"></script>
+    <script src="js/config.js"></script>
+  </body>
+</html>
