@@ -1,9 +1,3 @@
-function getPos(min, max) {
-  const pos = Math.random() * max;
-
-  return pos < min ? min : pos > max - min ? max - min : pos;
-}
-
 class Animation {
   constructor({ id, ...props }) {
     const canvas = document.getElementById(id);
@@ -12,8 +6,21 @@ class Animation {
     this.props = props;
     this.circles = this.generateCircles();
     this.animationRequestId = null;
+    this._start = false;
 
     this.animate();
+  }
+
+  areAllTypesEqual() {
+    const firstType = this.circles[0].type;
+
+    for (let i = 1; i < this.circles.length; i++) {
+      if (this.circles[i].type !== firstType) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   generateCircles() {
@@ -123,13 +130,9 @@ class Animation {
       }
     }
 
-    // if (this.needsRestart) {
-    //   this.needsRestart = false;
-
-    //   requestAnimationFrame(() => this.animate());
-    // } else {
-    //   setTimeout(() => requestAnimationFrame(() => this.animate()), 1000 / 60);
-    // }
+    if (!this._start) {
+      return;
+    }
 
     this.animationRequestId = requestAnimationFrame(() => this.animate());
   }
@@ -143,6 +146,14 @@ class Animation {
       [prop]: value,
     };
     this.circles = this.generateCircles();
+
+    this._start = false;
+
+    this.animate();
+  }
+
+  start() {
+    this._start = true;
 
     this.animate();
   }

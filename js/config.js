@@ -11,7 +11,7 @@ let types = {
   scissors: { name: "scissors", icon: "✂️" },
 };
 
-let animation = new Animation({
+window.animation = new Animation({
   circleSize,
   circleTotal,
   enableCollision,
@@ -21,43 +21,8 @@ let animation = new Animation({
   types,
 });
 
-function handleChangeCircle(param, event, boolean = false) {
-  if (boolean) {
-    animation.updateProps(param, Number(event.target.checked));
-  } else {
-    animation.updateProps(param, Number(event.target.value));
-  }
-}
-
-function handleResetAnimation() {
-  types = {
-    rock: { name: "rock", icon: "🪨" },
-    paper: { name: "paper", icon: "📰" },
-    scissors: { name: "scissors", icon: "✂️" },
-  };
-
-  animation = new Animation({
-    circleSize,
-    circleTotal,
-    enableCollision,
-    enableStroke,
-    id,
-    speed,
-    types,
-  });
-
-  document.querySelector("#circleSize").value = circleSize;
-  document.querySelector("#circleTotal").value = circleTotal;
-  document.querySelector("#speed").value = speed;
-  document.querySelector("#enableCollision").checked = enableCollision;
-  document.querySelector("#enableStroke").checked = enableStroke;
-
-  document.querySelector("#rock").innerHTML = "🪨";
-  document.querySelector("#paper").innerHTML = "📰";
-  document.querySelector("#scissors").innerHTML = "✂️";
-}
-
 const buttons = ["rock", "paper", "scissors"];
+const recorder = new CanvasRecorder(canvas);
 
 for (let i = 0; i < buttons.length; i++) {
   const button = document.querySelector(`#${buttons[i]}`);
@@ -88,3 +53,5 @@ for (let i = 0; i < buttons.length; i++) {
     animation.updateProps("types", types);
   });
 }
+
+loop();
