@@ -32,8 +32,6 @@
       let lastFrameTime = 0;
       let fps = 0;
 
-      console.log({ circles });
-
       function getPos(min, max) {
         const pos = Math.random() * max;
 
@@ -90,35 +88,6 @@
             circle2.directionX = -Math.cos(angle);
             circle2.directionY = -Math.sin(angle);
           }
-
-          // if (
-          //   (circle1.type === "rock" && circle2.type === "paper") ||
-          //   (circle1.type === "paper" && circle2.type === "rock")
-          // ) {
-          //   if (circle1.type === "rock") {
-          //     circle1.type = "paper";
-          //   } else {
-          //     circle2.type = "paper";
-          //   }
-          // } else if (
-          //   (circle1.type === "paper" && circle2.type === "scissors") ||
-          //   (circle1.type === "scissors" && circle2.type === "paper")
-          // ) {
-          //   if (circle1.type === "paper") {
-          //     circle1.type = "scissors";
-          //   } else {
-          //     circle2.type = "scissors";
-          //   }
-          // } else if (
-          //   (circle1.type === "scissors" && circle2.type === "rock") ||
-          //   (circle1.type === "rock" && circle2.type === "scissors")
-          // ) {
-          //   if (circle1.type === "scissors") {
-          //     circle1.type = "rock";
-          //   } else {
-          //     circle2.type = "rock";
-          //   }
-          // }
 
           for (let i = 0; i < Object.keys(types).length; i++) {
             const currentType = Object.values(types)[i].name;
