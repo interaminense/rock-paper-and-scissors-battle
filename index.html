@@ -16,84 +16,99 @@
       <canvas id="canvas" width="500" height="700"></canvas>
       <div>fps <span id="fps"></span></div>
 
-      <div class="controls">
-        <h3 class="title">Controls</h3>
+      <div class="right-sidebar">
+        <div class="controls">
+          <h3 class="title">Controls</h3>
 
-        <div id="pickerContainer"></div>
+          <div id="pickerContainer"></div>
 
-        <div class="mb-2">
-          <button id="rock" type="button" class="btn mb-2">🪨</button>
-          <button id="paper" type="button" class="btn mb-2">📰</button>
-          <button id="scissors" type="button" class="btn mb-2">✂️</button>
-        </div>
+          <div class="mb-2">
+            <button id="rock" type="button" class="btn mb-2">🪨</button>
+            <button id="paper" type="button" class="btn mb-2">📰</button>
+            <button id="scissors" type="button" class="btn mb-2">✂️</button>
+          </div>
 
-        <div class="mb-2">
-          <label for="circleSize">circle size</label>
-          <div>
+          <div class="mb-2">
+            <label for="circleSize">circle size</label>
+            <div>
+              <input
+                id="circleSize"
+                max="30"
+                min="5"
+                name="circleSize"
+                oninput="handleChangeCircle('circleSize', event)"
+                type="range"
+                value="15"
+              />
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div><label for="circleTotal">total circles</label></div>
             <input
-              id="circleSize"
-              max="30"
-              min="5"
-              name="circleSize"
-              oninput="handleChangeCircle('circleSize', event)"
+              id="circleTotal"
+              max="300"
+              min="3"
+              name="circleTotal"
+              oninput="handleChangeCircle('circleTotal', event)"
+              step="3"
               type="range"
-              value="15"
+              value="30"
             />
+          </div>
+
+          <div class="mb-2">
+            <div><label for="speed">speed</label></div>
+            <input
+              id="speed"
+              max="10"
+              min="1"
+              name="speed"
+              oninput="handleChangeCircle('speed', event)"
+              type="range"
+              value="2"
+            />
+          </div>
+
+          <div class="mb-2">
+            <input
+              oninput="handleChangeCircle('enableCollision', event, true)"
+              type="checkbox"
+              checked
+              id="enableCollision"
+            />
+
+            <label for="enableCollision">enable collision</label>
+          </div>
+
+          <div class="mb-2">
+            <input
+              oninput="handleChangeCircle('enableStroke', event, true)"
+              type="checkbox"
+              id="enableStroke"
+            />
+
+            <label for="enableStroke">enable circle stroke</label>
+          </div>
+
+          <div class="mb-2">
+            <button
+              id="startAnimationBtn"
+              class="btn btn-reset"
+              onclick="handleStartAnimation()"
+            >
+              start
+            </button>
+            <button class="btn btn-reset" onclick="handleResetAnimation()">
+              reset
+            </button>
           </div>
         </div>
 
-        <div class="mb-2">
-          <div><label for="circleTotal">total circles</label></div>
-          <input
-            id="circleTotal"
-            max="300"
-            min="3"
-            name="circleTotal"
-            oninput="handleChangeCircle('circleTotal', event)"
-            step="3"
-            type="range"
-            value="30"
-          />
-        </div>
-
-        <div class="mb-2">
-          <div><label for="speed">speed</label></div>
-          <input
-            id="speed"
-            max="10"
-            min="1"
-            name="speed"
-            oninput="handleChangeCircle('speed', event)"
-            type="range"
-            value="2"
-          />
-        </div>
-
-        <div class="mb-2">
-          <input
-            oninput="handleChangeCircle('enableCollision', event, true)"
-            type="checkbox"
-            checked
-            id="enableCollision"
-          />
-
-          <label for="enableCollision">enable collision</label>
-        </div>
-
-        <div class="mb-2">
-          <input
-            oninput="handleChangeCircle('enableStroke', event, true)"
-            type="checkbox"
-            id="enableStroke"
-          />
-
-          <label for="enableStroke">enable circle stroke</label>
-        </div>
-
-        <div class="mb-2">
-          <button class="btn btn-reset" onclick="handleResetAnimation()">
-            reset
-          </button>
+        <div class="controls">
+          <video id="video" width="100%" controls>
+            Your browser does not support the video tag.
+          </video>
         </div>
       </div>
 
@@ -173,6 +188,9 @@
 
     <script src="https://unpkg.com/picmo@latest/dist/umd/index.js"></script>
     <script src="https://unpkg.com/@picmo/popup-picker@latest/dist/umd/index.js"></script>
+    <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
+    <script src="https://www.webrtc-experiment.com/screenshot.js"></script>
+    <script src="js/fns.js"></script>
     <script src="js/animation.js"></script>
     <script src="js/fps.js"></script>
     <script src="js/config.js"></script>

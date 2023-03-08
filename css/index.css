@@ -27,16 +27,20 @@ html {
   position: relative;
 }
 
-.controls {
+.right-sidebar {
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(calc(-200px - 4rem));
+}
+
+.controls {
   width: 200px;
   background: #dbdbdb;
   padding: 1rem;
   border: 1px solid #000;
   box-shadow: 4px 4px 0 -1px #000;
+  margin-bottom: 2rem;
 }
 
 .about-it {
@@ -44,7 +48,7 @@ html {
   right: 0;
   top: 0;
   width: 200px;
-  transform: translateX(calc(200px + 4rem));
+  transform: translateX(calc(200px + 2rem));
 }
 
 :is(.controls, .about-it) .title {
