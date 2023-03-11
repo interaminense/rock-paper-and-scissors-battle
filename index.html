@@ -13,6 +13,10 @@
     </header>
 
     <div class="container">
+      <div class="recording" id="recording" style="display: none">
+        recording
+      </div>
+
       <canvas id="canvas" width="500" height="700"></canvas>
       <div>fps <span id="fps"></span></div>
 
@@ -90,26 +94,32 @@
 
             <label for="enableStroke">enable circle stroke</label>
           </div>
-
-          <div class="mb-2">
-            <button
-              id="startAnimationBtn"
-              class="btn btn-reset"
-              onclick="handleStartAnimation()"
-            >
-              start
-            </button>
-            <button class="btn btn-reset" onclick="handleResetAnimation()">
-              reset
-            </button>
-          </div>
         </div>
 
-        <div class="controls">
+        <div class="controls" id="videoContainer" style="display: none">
           <video id="video" width="100%" controls>
             Your browser does not support the video tag.
           </video>
         </div>
+
+        <button
+          id="startAnimationBtn"
+          class="btn btn-reset"
+          onclick="handleStartAnimation()"
+        >
+          start
+        </button>
+        <button
+          id="stopAnimationBtn"
+          class="btn btn-reset"
+          onclick="handleStopAnimation()"
+          style="display: none"
+        >
+          stop
+        </button>
+        <button class="btn btn-reset" onclick="handleResetAnimation()">
+          reset
+        </button>
       </div>
 
       <div class="about-it">

@@ -1,4 +1,8 @@
+let loopRequestId = null;
+
 function handleChangeCircle(param, event, boolean = false) {
+  stopRecord();
+
   if (boolean) {
     animation.updateProps(param, Number(event.target.checked));
   } else {
@@ -7,13 +11,39 @@ function handleChangeCircle(param, event, boolean = false) {
 }
 
 function handleStartAnimation() {
-  const startButton = document.querySelector("#startAnimationBtn");
+  cancelAnimationFrame(loopRequestId);
 
-  startButton.remove();
+  const startButton = document.querySelector("#startAnimationBtn");
+  const stopButton = document.querySelector("#stopAnimationBtn");
+  const recording = document.querySelector("#recording");
+
+  stopButton.style.display = "inline";
+  startButton.style.display = "none";
+  recording.style.display = "block";
 
   startRecord();
 
   animation.start();
+
+  loop();
+}
+
+function handleStopAnimation() {
+  cancelAnimationFrame(loopRequestId);
+
+  const startButton = document.querySelector("#startAnimationBtn");
+  const stopButton = document.querySelector("#stopAnimationBtn");
+  const videoContainer = document.querySelector("#videoContainer");
+  const recording = document.querySelector("#recording");
+
+  stopButton.style.display = "none";
+  startButton.style.display = "inline";
+  videoContainer.style.display = "block";
+  recording.style.display = "none";
+
+  stopRecord();
+
+  animation.stop();
 }
 
 function handleResetAnimation() {
@@ -22,12 +52,12 @@ function handleResetAnimation() {
 
 function loop() {
   if (animation.areAllTypesEqual()) {
-    stopRecord();
+    handleStopAnimation();
 
     return;
   }
 
-  requestAnimationFrame(loop);
+  loopRequestId = requestAnimationFrame(() => loop());
 }
 
 function startRecord() {

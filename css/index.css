@@ -99,3 +99,40 @@ footer {
   background-color: #dbdbdb;
   border-top: 1px solid #000;
 }
+
+.recording {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  background-color: red;
+  color: #fff;
+  font-size: 10px;
+  padding: 2px 5px;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 -1px #000;
+  border: 1px solid #000;
+}
+
+.recording:before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 5px;
+  margin-top: 0px;
+  animation: pulse 2s linear infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

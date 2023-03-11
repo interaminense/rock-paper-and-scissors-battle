@@ -81,6 +81,18 @@ class Animation {
     }
   }
 
+  drawWatermark() {
+    const footerText = "github.com/interaminense";
+
+    this.ctx.beginPath();
+    this.ctx.font = "14px Kanit";
+    this.ctx.globalAlpha = 0.5;
+    this.ctx.fillText(footerText, 20, canvas.height - 20);
+    this.ctx.closePath();
+
+    this.ctx.globalAlpha = 1;
+  }
+
   animate() {
     const { circleSize, enableStroke, types } = this.props;
 
@@ -123,6 +135,9 @@ class Animation {
       this.ctx.closePath();
     });
 
+    // Draw the footer text at the bottom center of the canvas
+    this.drawWatermark();
+
     // Call the collision detection function to check if the circles are colliding
     for (let i = 0; i < this.circles.length; i++) {
       for (let j = i + 1; j < this.circles.length; j++) {
@@ -145,6 +160,7 @@ class Animation {
       ...this.props,
       [prop]: value,
     };
+
     this.circles = this.generateCircles();
 
     this._start = false;
@@ -153,7 +169,19 @@ class Animation {
   }
 
   start() {
+    // Stop the animation loop
+    cancelAnimationFrame(this.animationRequestId);
+
     this._start = true;
+
+    this.animate();
+  }
+
+  stop() {
+    // Stop the animation loop
+    cancelAnimationFrame(this.animationRequestId);
+
+    this._start = false;
 
     this.animate();
   }
