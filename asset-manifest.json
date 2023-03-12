@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rock-paper-and-scissors-battle/static/css/main.3aeb2a03.css",
+    "main.js": "/rock-paper-and-scissors-battle/static/js/main.a8ee46b3.js",
+    "static/js/787.a084fb5b.chunk.js": "/rock-paper-and-scissors-battle/static/js/787.a084fb5b.chunk.js",
+    "index.html": "/rock-paper-and-scissors-battle/index.html",
+    "main.3aeb2a03.css.map": "/rock-paper-and-scissors-battle/static/css/main.3aeb2a03.css.map",
+    "main.a8ee46b3.js.map": "/rock-paper-and-scissors-battle/static/js/main.a8ee46b3.js.map",
+    "787.a084fb5b.chunk.js.map": "/rock-paper-and-scissors-battle/static/js/787.a084fb5b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3aeb2a03.css",
+    "static/js/main.a8ee46b3.js"
+  ]
+}
