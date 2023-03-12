@@ -1,8 +1,42 @@
-class Animation {
-  constructor({ id, ...props }) {
-    const canvas = document.getElementById(id);
+import { getPos } from "../utils.ts/utils";
 
-    this.ctx = canvas.getContext("2d");
+interface CircleType {
+  name: string;
+  icon: string;
+}
+
+interface AnimationProps {
+  onFinish: () => void;
+  canvas: HTMLCanvasElement;
+  circleSize: number;
+  circleTotal: number;
+  speed: number;
+  types: Record<string, CircleType>;
+  enableStroke: boolean;
+  enableCollision: boolean;
+}
+
+interface Circle {
+  x: number;
+  y: number;
+  radius: number;
+  speed: number;
+  directionX: number;
+  directionY: number;
+  type: string;
+}
+
+export class Animation {
+  private ctx: CanvasRenderingContext2D;
+  private props: AnimationProps;
+  private circles: Circle[];
+  private animationRequestId: any;
+  private _start: boolean;
+
+  constructor(props: AnimationProps) {
+    const { canvas } = props;
+
+    this.ctx = canvas.getContext("2d")!;
     this.props = props;
     this.circles = this.generateCircles();
     this.animationRequestId = null;
@@ -11,21 +45,11 @@ class Animation {
     this.animate();
   }
 
-  areAllTypesEqual() {
-    const firstType = this.circles[0].type;
+  private generateCircles() {
+    const { canvas } = this.props;
 
-    for (let i = 1; i < this.circles.length; i++) {
-      if (this.circles[i].type !== firstType) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  generateCircles() {
     const { circleSize, circleTotal, speed, types } = this.props;
-    const circles = [];
+    const circles: Circle[] = [];
     const arrLength = Math.floor(circleTotal / Object.keys(types).length);
 
     for (let i = 0; i < circleTotal; i++) {
@@ -45,7 +69,7 @@ class Animation {
     return circles;
   }
 
-  detectCollision(circle1, circle2) {
+  private detectCollision(circle1: Circle, circle2: Circle) {
     const { enableCollision, types } = this.props;
     const distanceX = circle1.x - circle2.x;
     const distanceY = circle1.y - circle2.y;
@@ -81,7 +105,9 @@ class Animation {
     }
   }
 
-  drawWatermark() {
+  private drawWatermark() {
+    const { canvas } = this.props;
+
     const footerText = "github.com/interaminense";
 
     this.ctx.beginPath();
@@ -93,8 +119,8 @@ class Animation {
     this.ctx.globalAlpha = 1;
   }
 
-  animate() {
-    const { circleSize, enableStroke, types } = this.props;
+  private animate() {
+    const { canvas, circleSize, enableStroke, types } = this.props;
 
     // Clean up canvas
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -149,12 +175,32 @@ class Animation {
       return;
     }
 
+    if (this.areAllTypesEqual()) {
+      this.props.onFinish();
+
+      this.stop();
+    }
+
     this.animationRequestId = requestAnimationFrame(() => this.animate());
   }
 
-  updateProps(prop, value) {
-    // Stop the animation loop
+  private areAllTypesEqual() {
+    const firstType = this.circles[0].type;
+    for (let i = 1; i < this.circles.length; i++) {
+      if (this.circles[i].type !== firstType) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private dispose() {
     cancelAnimationFrame(this.animationRequestId);
+    this.ctx.clearRect(0, 0, this.props.canvas.width, this.props.canvas.height);
+  }
+
+  public updateProps(prop: string, value: any) {
+    this.dispose();
 
     this.props = {
       ...this.props,
@@ -168,18 +214,18 @@ class Animation {
     this.animate();
   }
 
-  start() {
-    // Stop the animation loop
-    cancelAnimationFrame(this.animationRequestId);
+  public start() {
+    this.dispose();
+
+    this.circles = this.generateCircles();
 
     this._start = true;
 
     this.animate();
   }
 
-  stop() {
-    // Stop the animation loop
-    cancelAnimationFrame(this.animationRequestId);
+  public stop() {
+    this.dispose();
 
     this._start = false;
 

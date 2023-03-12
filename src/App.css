@@ -27,7 +27,7 @@ html {
   position: relative;
 }
 
-.right-sidebar {
+.left-sidebar {
   position: absolute;
   top: 0;
   left: 0;
@@ -43,7 +43,7 @@ html {
   margin-bottom: 2rem;
 }
 
-.about-it {
+.right-sidebar {
   position: absolute;
   right: 0;
   top: 0;
@@ -51,7 +51,7 @@ html {
   transform: translateX(calc(200px + 2rem));
 }
 
-:is(.controls, .about-it) .title {
+:is(.controls, .right-sidebar) .title {
   margin-top: 0;
 }
 
