@@ -1,7 +1,7 @@
 {
-  "name": "new-app",
+  "homepage": "https://interaminense.github.io/rock-paper-and-scissors-battle",
+  "name": "rock-paper-and-scissors-battle",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@picmo/popup-picker": "^5.8.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -11,6 +11,7 @@
     "@types/node": "^16.18.14",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "gh-pages": "^5.0.0",
     "picmo": "^5.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -19,10 +20,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "deploy": "gh-pages -d build",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
