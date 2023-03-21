@@ -1,11 +1,11 @@
 import { createContext, useReducer } from "react";
 import { Animation } from "./classes/animation";
-import { TYPES } from "./components/Canvas";
+import { TYPES, Types } from "./components/Canvas";
 
 interface IContext {
   animation?: Animation | null;
   start: boolean;
-  types: typeof TYPES;
+  types: Types;
   recorder: any;
   videoSrc: string;
 }

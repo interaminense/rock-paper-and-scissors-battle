@@ -125,6 +125,15 @@ footer {
   animation: pulse 2s linear infinite;
 }
 
+.dropdown {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.dropdown .btn {
+  margin-bottom: 0.5rem;
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;

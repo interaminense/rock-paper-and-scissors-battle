@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../AppContext";
 import {
   CIRCLE_SIZE,
@@ -6,7 +6,6 @@ import {
   ENABLE_COLLISION,
   ENABLE_STROKE,
   SPEED,
-  TYPES,
 } from "./Canvas";
 import { createPopup } from "@picmo/popup-picker";
 
@@ -30,12 +29,30 @@ const usePopup = (
   }, [refBtn.current, refContainer.current]);
 };
 
+interface IBtnIconProps extends React.HTMLAttributes<HTMLElement> {
+  type: {
+    name: string;
+    icon: string;
+    img?: HTMLImageElement;
+  };
+}
+
+const BtnIcon: React.FC<IBtnIconProps> = ({ onClick, type }) => {
+  return (
+    <button onClick={onClick} type="button" className="btn mb-2">
+      {type?.img ? (
+        <img src={type.img.src} alt="" width={20} height={15} />
+      ) : (
+        type.icon
+      )}
+    </button>
+  );
+};
+
 export function AnimationManager() {
   const [{ types }, dispatch] = useContext(AppContext);
   const refPickerContainer = useRef(null);
-  const refBtnA = useRef(null);
-  const refBtnB = useRef(null);
-  const refBtnC = useRef(null);
+  const popupRef = useRef(null);
 
   const [{ animation }] = useContext(AppContext);
   const [size, setSize] = useState(CIRCLE_SIZE);
@@ -43,88 +60,107 @@ export function AnimationManager() {
   const [speed, setSpeed] = useState(SPEED);
   const [enableCollision, setEnableCollision] = useState(ENABLE_COLLISION);
   const [enableStroke, setEnableStoke] = useState(ENABLE_STROKE);
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [btnClicked, setBtnClicked] = useState<string>("rock");
 
-  const popupA = usePopup(refPickerContainer, refBtnA);
-  const popupB = usePopup(refPickerContainer, refBtnB);
-  const popupC = usePopup(refPickerContainer, refBtnC);
+  const popup = usePopup(refPickerContainer, popupRef);
 
   useEffect(() => {
-    function selectIcon(event: any, key: keyof typeof TYPES) {
+    function selectIcon(event: any, key: string) {
       const newTypes = {
         ...types,
         [key]: { ...types[key], icon: event.emoji },
       };
 
+      delete newTypes[key]?.img;
+
       dispatch({ type: "set_types", payload: newTypes });
       animation?.updateProps("types", newTypes);
     }
 
-    popupA?.addEventListener("emoji:select", (event: any) =>
-      selectIcon(event, "rock")
-    );
-    popupB?.addEventListener("emoji:select", (event: any) =>
-      selectIcon(event, "paper")
-    );
-    popupC?.addEventListener("emoji:select", (event: any) =>
-      selectIcon(event, "scissors")
+    popup?.addEventListener("emoji:select", (event: any) =>
+      selectIcon(event, btnClicked)
     );
 
     return () => {
-      popupA?.removeEventListener("emoji:select", (event: any) =>
-        selectIcon(event, "rock")
-      );
-      popupB?.addEventListener("emoji:select", (event: any) =>
-        selectIcon(event, "paper")
-      );
-      popupC?.addEventListener("emoji:select", (event: any) =>
-        selectIcon(event, "scissors")
+      popup?.removeEventListener("emoji:select", (event: any) =>
+        selectIcon(event, btnClicked)
       );
     };
-  }, [animation, dispatch, popupA, popupB, popupC, types]);
+  }, [animation, btnClicked, dispatch, popup, types]);
 
   return (
     <>
-      <h3 className="title">Controls</h3>
+      <h3>Controls</h3>
 
       <div ref={refPickerContainer} />
 
       <div className="mb-2">
-        <button
+        <BtnIcon
+          type={types["rock"]}
           onClick={() => {
-            popupA?.open();
-            popupB?.close();
-            popupC?.close();
+            setIsOpenDropdown((isOpenDropdown) => !isOpenDropdown);
+            setBtnClicked("rock");
           }}
-          ref={refBtnA}
-          type="button"
-          className="btn mb-2"
-        >
-          {types["rock"].icon}
-        </button>
-        <button
+        />
+
+        <BtnIcon
+          type={types["paper"]}
           onClick={() => {
-            popupB?.open();
-            popupA?.close();
-            popupC?.close();
+            setIsOpenDropdown((isOpenDropdown) => !isOpenDropdown);
+            setBtnClicked("paper");
           }}
-          ref={refBtnB}
-          type="button"
-          className="btn mb-2"
-        >
-          {types["paper"].icon}
-        </button>
-        <button
+        />
+
+        <BtnIcon
+          type={types["scissors"]}
           onClick={() => {
-            popupC?.open();
-            popupA?.close();
-            popupB?.close();
+            setIsOpenDropdown((isOpenDropdown) => !isOpenDropdown);
+            setBtnClicked("scissors");
           }}
-          ref={refBtnC}
-          type="button"
-          className="btn mb-2"
+        />
+      </div>
+
+      <div
+        style={{ display: isOpenDropdown ? "block" : "none" }}
+        className="dropdown"
+      >
+        <button
+          className="btn"
+          ref={popupRef}
+          key="icon"
+          onClick={() => {
+            setIsOpenDropdown(false);
+            popup?.open();
+          }}
         >
-          {types["scissors"].icon}
+          {"select an icon"}
         </button>
+        <div key="image">
+          <input
+            className="btn"
+            accept=".jpg, .jpeg, .gif, .png"
+            type="file"
+            onChange={(event) => {
+              setIsOpenDropdown(false);
+
+              if (event?.target?.files) {
+                const img = new Image();
+                img.src = URL.createObjectURL(event.target.files[0]);
+
+                img.onload = () => {
+                  const newTypes = {
+                    ...types,
+                    [btnClicked]: { ...types[btnClicked], img },
+                  };
+
+                  dispatch({ type: "set_types", payload: newTypes });
+                  animation?.updateProps("types", newTypes);
+                };
+              }
+            }}
+          />
+        </div>
       </div>
 
       <div className="mb-2">

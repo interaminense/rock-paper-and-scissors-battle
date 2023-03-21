@@ -3,6 +3,7 @@ import { getPos } from "../utils.ts/utils";
 interface CircleType {
   name: string;
   icon: string;
+  img?: HTMLImageElement;
 }
 
 interface AnimationProps {
@@ -24,6 +25,7 @@ interface Circle {
   directionX: number;
   directionY: number;
   type: string;
+  img?: HTMLImageElement;
 }
 
 export class Animation {
@@ -41,8 +43,6 @@ export class Animation {
     this.circles = this.generateCircles();
     this.animationRequestId = null;
     this._start = false;
-
-    this.animate();
   }
 
   private generateCircles() {
@@ -54,8 +54,7 @@ export class Animation {
 
     for (let i = 0; i < circleTotal; i++) {
       const index = Math.floor(i / arrLength);
-
-      circles.push({
+      const circle: Circle = {
         x: getPos(circleSize, canvas.width),
         y: getPos(circleSize, canvas.height),
         radius: circleSize,
@@ -63,7 +62,13 @@ export class Animation {
         directionX: Math.random() < 0.5 ? -1 : 1,
         directionY: Math.random() < 0.5 ? -1 : 1,
         type: Object.values(types)[index].name,
-      });
+      };
+
+      if (Object.values(types)[index].img) {
+        circle.img = Object.values(types)[index].img;
+      }
+
+      circles.push(circle);
     }
 
     return circles;
@@ -108,19 +113,57 @@ export class Animation {
   private drawWatermark() {
     const { canvas } = this.props;
 
-    const footerText = "github.com/interaminense";
-
     this.ctx.beginPath();
     this.ctx.font = "14px Kanit";
     this.ctx.globalAlpha = 0.5;
-    this.ctx.fillText(footerText, 20, canvas.height - 20);
+    this.ctx.fillText("github.com/interaminense", 20, canvas.height - 20);
     this.ctx.closePath();
 
     this.ctx.globalAlpha = 1;
   }
 
+  private drawImage(circle: Circle) {
+    const { circleSize, enableStroke, types } = this.props;
+
+    this.ctx.beginPath();
+
+    this.ctx.drawImage(
+      types[circle.type].img as CanvasImageSource,
+      circle.x - circleSize,
+      circle.y - circleSize,
+      circleSize * 2,
+      circleSize * 2
+    );
+    this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+
+    enableStroke && this.ctx.stroke();
+
+    this.ctx.closePath();
+  }
+
+  private drawIcon(circle: Circle) {
+    const { circleSize, enableStroke, types } = this.props;
+
+    this.ctx.beginPath();
+    this.ctx.font = `${circleSize * 2}px Arial`;
+    this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+
+    enableStroke && this.ctx.stroke();
+
+    const text = types[circle.type].icon;
+    const textWidth = this.ctx.measureText(text).width;
+
+    this.ctx.fillText(
+      text,
+      circle.x - textWidth / 2,
+      circle.y + circleSize / 1.5
+    );
+
+    this.ctx.closePath();
+  }
+
   private animate() {
-    const { canvas, circleSize, enableStroke, types } = this.props;
+    const { canvas, types } = this.props;
 
     // Clean up canvas
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -144,21 +187,11 @@ export class Animation {
       circle.x += circle.speed * circle.directionX;
       circle.y += circle.speed * circle.directionY;
 
-      this.ctx.beginPath();
-      this.ctx.font = `${circleSize * 2}px Arial`;
-      this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
-
-      enableStroke && this.ctx.stroke();
-
-      const text = types[circle.type].icon;
-      const textWidth = this.ctx.measureText(text).width;
-
-      this.ctx.fillText(
-        text,
-        circle.x - textWidth / 2,
-        circle.y + circleSize / 1.5
-      );
-      this.ctx.closePath();
+      if (types[circle.type].img) {
+        this.drawImage(circle);
+      } else {
+        this.drawIcon(circle);
+      }
     });
 
     // Draw the footer text at the bottom center of the canvas

@@ -2,13 +2,24 @@ import { useContext, useEffect, useRef } from "react";
 import { AppContext } from "../AppContext";
 import { Animation } from "../classes/animation";
 
+export type Type = {
+  name: string;
+  icon: string;
+  img?: HTMLImageElement;
+};
+
+export type Types = { [key: string]: Type };
+
 export const CIRCLE_SIZE = 15;
 export const CIRCLE_TOTAL = 30;
 export const ENABLE_COLLISION = true;
 export const ENABLE_STROKE = false;
 export const SPEED = 2;
-export const TYPES = {
-  rock: { name: "rock", icon: "🪨" },
+export const TYPES: Types = {
+  rock: {
+    name: "rock",
+    icon: "🪨",
+  },
   paper: { name: "paper", icon: "📰" },
   scissors: { name: "scissors", icon: "✂️" },
 };
