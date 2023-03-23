@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rock-paper-and-scissors-battle/static/css/main.4338d5b7.css",
-    "main.js": "/rock-paper-and-scissors-battle/static/js/main.aecf6c27.js",
+    "main.css": "/rock-paper-and-scissors-battle/static/css/main.a8d98c16.css",
+    "main.js": "/rock-paper-and-scissors-battle/static/js/main.49dd35cb.js",
     "static/js/787.a084fb5b.chunk.js": "/rock-paper-and-scissors-battle/static/js/787.a084fb5b.chunk.js",
     "index.html": "/rock-paper-and-scissors-battle/index.html",
-    "main.4338d5b7.css.map": "/rock-paper-and-scissors-battle/static/css/main.4338d5b7.css.map",
-    "main.aecf6c27.js.map": "/rock-paper-and-scissors-battle/static/js/main.aecf6c27.js.map",
+    "main.a8d98c16.css.map": "/rock-paper-and-scissors-battle/static/css/main.a8d98c16.css.map",
+    "main.49dd35cb.js.map": "/rock-paper-and-scissors-battle/static/js/main.49dd35cb.js.map",
     "787.a084fb5b.chunk.js.map": "/rock-paper-and-scissors-battle/static/js/787.a084fb5b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4338d5b7.css",
-    "static/js/main.aecf6c27.js"
+    "static/css/main.a8d98c16.css",
+    "static/js/main.49dd35cb.js"
   ]
 }
