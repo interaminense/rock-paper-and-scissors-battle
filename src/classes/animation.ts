@@ -110,13 +110,27 @@ export class Animation {
     }
   }
 
+  private drawBackground() {
+    const { canvas } = this.props;
+
+    this.ctx.beginPath();
+
+    this.ctx.fillStyle = "white";
+    this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    this.ctx.closePath();
+  }
+
   private drawWatermark() {
     const { canvas } = this.props;
 
     this.ctx.beginPath();
+
+    this.ctx.fillStyle = "black";
     this.ctx.font = "14px Kanit";
     this.ctx.globalAlpha = 0.5;
     this.ctx.fillText("github.com/interaminense", 20, canvas.height - 20);
+
     this.ctx.closePath();
 
     this.ctx.globalAlpha = 1;
@@ -125,7 +139,13 @@ export class Animation {
   private drawImage(circle: Circle) {
     const { circleSize, enableStroke, types } = this.props;
 
+    enableStroke && this.ctx.stroke();
+
+    this.ctx.save();
     this.ctx.beginPath();
+    this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+    this.ctx.closePath();
+    this.ctx.clip();
 
     this.ctx.drawImage(
       types[circle.type].img as CanvasImageSource,
@@ -134,11 +154,12 @@ export class Animation {
       circleSize * 2,
       circleSize * 2
     );
+
+    this.ctx.beginPath();
     this.ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
-
-    enableStroke && this.ctx.stroke();
-
+    this.ctx.clip();
     this.ctx.closePath();
+    this.ctx.restore();
   }
 
   private drawIcon(circle: Circle) {
@@ -168,6 +189,11 @@ export class Animation {
     // Clean up canvas
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    this.drawBackground();
+
+    // Draw the footer text at the bottom center of the canvas
+    this.drawWatermark();
+
     this.circles.forEach((circle) => {
       // Add logic for bouncing the circles on the edges of the canvas
       if (
@@ -193,9 +219,6 @@ export class Animation {
         this.drawIcon(circle);
       }
     });
-
-    // Draw the footer text at the bottom center of the canvas
-    this.drawWatermark();
 
     // Call the collision detection function to check if the circles are colliding
     for (let i = 0; i < this.circles.length; i++) {

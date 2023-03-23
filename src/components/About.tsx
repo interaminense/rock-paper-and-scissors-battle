@@ -4,7 +4,7 @@ import { Type } from "./Canvas";
 
 function RenderType({ type }: { type: Type }) {
   return type?.img ? (
-    <img src={type.img.src} alt="" width={20} />
+    <img className="img-border-radius" src={type.img.src} alt="" width={20} />
   ) : (
     <span>{type.icon}</span>
   );

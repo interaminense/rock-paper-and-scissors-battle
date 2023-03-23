@@ -41,7 +41,13 @@ const BtnIcon: React.FC<IBtnIconProps> = ({ onClick, type }) => {
   return (
     <button onClick={onClick} type="button" className="btn mb-2">
       {type?.img ? (
-        <img src={type.img.src} alt="" width={20} height={15} />
+        <img
+          className="img-border-radius"
+          src={type.img.src}
+          alt=""
+          width={20}
+          height={15}
+        />
       ) : (
         type.icon
       )}

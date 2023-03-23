@@ -134,6 +134,13 @@ footer {
   margin-bottom: 0.5rem;
 }
 
+.img-border-radius {
+  border-radius: 50%;
+  height: 20px;
+  transform: translateY(4px);
+  width: 20px;
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;
